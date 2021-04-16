@@ -1,0 +1,28 @@
+obj_xaqp#:#AsqQuestionPool
+obj_xaqp_duplicate#:#AsqQuestionPool kopieren
+objs_xaqp#:#AsqQuestionPool's
+objs_xaqp_duplicate#:#AsqQuestionPool's kopieren
+rbac_create_xaqp#:#AsqQuestionPool anlegen
+rep_robj_xaqp_obj_xaqp#:#AsqQuestionPool
+xaqp_add#:#Hinzufügen
+xaqp_delete#:#Löschen
+xaqp_edit_permission#:#Rechte bearbeiten
+xaqp_new#:#AsqQuestionPool anlegen
+xaqp_read#:#Lesen
+xaqp_visible#:#Sichtbar
+xaqp_write#:#Bearbeiten
+config_configuration#:#Konfiguration
+config_configuration_saved#:#Konfiguration gespeichert
+config_save#:#Speichern
+object_manage_contents#:#Bearbeiten
+object_offline#:#Offline
+object_permission_denied#:#Zugriff verweigert
+object_show_contents#:#Inhalte
+object_status#:#Status
+settings_cancel#:#Abbrechen
+settings_description#:#Beschreibung
+settings_online#:#Online
+settings_save#:#Speichern
+settings_saved#:#Einstellungen gespeichert
+settings_settings#:#Einstellungen
+settings_title#:#Titel

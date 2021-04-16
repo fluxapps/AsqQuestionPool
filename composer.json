@@ -1,0 +1,49 @@
+{
+  "name": "srag/asqquestionpool",
+  "description": "Short description",
+  "type": "project",
+  "keywords": [
+    "ILIAS",
+    "Plugin"
+  ],
+  "homepage": "https://github.com/studer-raimann/AsqQuestionPool",
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "studer + raimann ag - Team Custom 2",
+      "email": "support-custom2@studer-raimann.ch",
+      "homepage": "https://studer-raimann.ch",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://plugins.studer-raimann.ch/goto.php?target=uihk_srsu_"
+  },
+  "require": {
+    "php": ">=7.2",
+    "srag/activerecordconfig": ">=0.1.0",
+    "srag/custominputguis": ">=0.1.0",
+    "srag/dic": ">=0.1.0",
+    "srag/librariesnamespacechanger": ">=0.1.0",
+    "srag/removeplugindataconfirm": ">=0.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "srag\\Plugins\\AsqQuestionPool\\": "src/"
+    },
+    "classmap": [
+      "classes/",
+      "src/Config/class.ConfigCtrl.php"
+    ]
+  },
+  "config": {
+    "classmap-authoritative": true,
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "scripts": {
+    "pre-autoload-dump": [
+      "srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger::rewriteLibrariesNamespaces"
+    ]
+  }
+}

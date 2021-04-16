@@ -1,0 +1,361 @@
+[
+    {
+        "name": "srag/activerecordconfig",
+        "version": "0.20.4",
+        "version_normalized": "0.20.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fluxfw/ActiveRecordConfig.git",
+            "reference": "40b7ae496598fafd12b0f91b63b875ded1ecac73"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fluxfw/ActiveRecordConfig/zipball/40b7ae496598fafd12b0f91b63b875ded1ecac73",
+            "reference": "40b7ae496598fafd12b0f91b63b875ded1ecac73",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0",
+            "srag/custominputguis": ">=0.1.0",
+            "srag/dic": ">=0.1.0"
+        },
+        "require-dev": {
+            "srag/generateplugininfoshelper": ">=0.1.0"
+        },
+        "time": "2021-03-23T12:48:34+00:00",
+        "type": "library",
+        "extra": {
+            "ilias_plugin": {
+                "ilias_min_version": "5.4.0",
+                "ilias_max_version": "6.999"
+            },
+            "generate_plugin_readme_template": "ILIAS_LIBRARY",
+            "long_description_template": "src/LONG_DESCRIPTION.md"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "srag\\ActiveRecordConfig\\AsqQuestionPool\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "studer + raimann ag - Team Custom 1",
+                "email": "support-custom1@studer-raimann.ch",
+                "homepage": "https://studer-raimann.ch",
+                "role": "Developer"
+            }
+        ],
+        "description": "Simple ActiveRecord config for ILIAS plugins",
+        "homepage": "https://github.com/fluxfw/ActiveRecordConfig",
+        "keywords": [
+            "ILIAS",
+            "activerecord",
+            "config"
+        ]
+    },
+    {
+        "name": "srag/custominputguis",
+        "version": "0.42.6",
+        "version_normalized": "0.42.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fluxfw/CustomInputGUIs.git",
+            "reference": "879ffdedfd47d799914b4c1e2ce6b5887dfee2b8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fluxfw/CustomInputGUIs/zipball/879ffdedfd47d799914b4c1e2ce6b5887dfee2b8",
+            "reference": "879ffdedfd47d799914b4c1e2ce6b5887dfee2b8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0",
+            "srag/dic": ">=0.1.0"
+        },
+        "require-dev": {
+            "srag/generateplugininfoshelper": ">=0.1.0"
+        },
+        "time": "2021-03-29T07:11:05+00:00",
+        "type": "library",
+        "extra": {
+            "ilias_plugin": {
+                "ilias_min_version": "5.4.0",
+                "ilias_max_version": "6.999"
+            },
+            "generate_plugin_readme_template": "ILIAS_LIBRARY",
+            "long_description_template": "src/LONG_DESCRIPTION.md"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "srag\\CustomInputGUIs\\AsqQuestionPool\\": "src/"
+            },
+            "classmap": [
+                "src/MultiSelectSearchNewInputGUI/class.ObjectChildrenAjaxAutoCompleteCtrl.php",
+                "src/MultiSelectSearchNewInputGUI/class.ObjectsAjaxAutoCompleteCtrl.php",
+                "src/MultiSelectSearchNewInputGUI/class.OrgUnitAjaxAutoCompleteCtrl.php",
+                "src/MultiSelectSearchNewInputGUI/class.UsersAjaxAutoCompleteCtrl.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "studer + raimann ag - Team Custom 1",
+                "email": "support-custom1@studer-raimann.ch",
+                "homepage": "https://studer-raimann.ch",
+                "role": "Developer"
+            }
+        ],
+        "description": "Custom Input-GUI's",
+        "homepage": "https://github.com/fluxfw/CustomInputGUIs",
+        "keywords": [
+            "ILIAS",
+            "PropertyForm",
+            "gui",
+            "input",
+            "table"
+        ]
+    },
+    {
+        "name": "srag/dic",
+        "version": "0.32.2",
+        "version_normalized": "0.32.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fluxfw/DIC.git",
+            "reference": "0f16b0d52193cb7b094b8631e9c3b2367a061cac"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fluxfw/DIC/zipball/0f16b0d52193cb7b094b8631e9c3b2367a061cac",
+            "reference": "0f16b0d52193cb7b094b8631e9c3b2367a061cac",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0"
+        },
+        "require-dev": {
+            "srag/generateplugininfoshelper": ">=0.1.0"
+        },
+        "time": "2021-03-23T12:50:35+00:00",
+        "type": "library",
+        "extra": {
+            "ilias_plugin": {
+                "ilias_min_version": "5.4.0",
+                "ilias_max_version": "6.999"
+            },
+            "generate_plugin_readme_template": "ILIAS_LIBRARY",
+            "long_description_template": "src/LONG_DESCRIPTION.md"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "srag\\DIC\\AsqQuestionPool\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "studer + raimann ag - Team Custom 1",
+                "email": "support-custom1@studer-raimann.ch",
+                "homepage": "https://studer-raimann.ch",
+                "role": "Developer"
+            }
+        ],
+        "description": "Use all ILIAS globals in your class",
+        "homepage": "https://github.com/fluxfw/DIC",
+        "keywords": [
+            "ILIAS",
+            "dic",
+            "globals",
+            "trait"
+        ]
+    },
+    {
+        "name": "srag/librariesnamespacechanger",
+        "version": "0.15.2",
+        "version_normalized": "0.15.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fluxfw/LibrariesNamespaceChanger.git",
+            "reference": "cd3b0b6340fdc12ba7bfde0bcab3079d3b740483"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fluxfw/LibrariesNamespaceChanger/zipball/cd3b0b6340fdc12ba7bfde0bcab3079d3b740483",
+            "reference": "cd3b0b6340fdc12ba7bfde0bcab3079d3b740483",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0"
+        },
+        "require-dev": {
+            "srag/generateplugininfoshelper": ">=0.1.0"
+        },
+        "time": "2021-03-23T12:47:58+00:00",
+        "type": "library",
+        "extra": {
+            "generate_plugin_readme_template": "LIBRARY",
+            "long_description_template": "src/LONG_DESCRIPTION.md"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "srag\\LibrariesNamespaceChanger\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "studer + raimann ag - Team Custom 1",
+                "email": "support-custom1@studer-raimann.ch",
+                "homepage": "https://studer-raimann.ch",
+                "role": "Developer"
+            }
+        ],
+        "description": "Change namespace of libraries to plugin namespace",
+        "homepage": "https://github.com/fluxfw/LibrariesNamespaceChanger",
+        "keywords": [
+            "changer",
+            "libraries",
+            "namespace"
+        ]
+    },
+    {
+        "name": "srag/librarylanguageinstaller",
+        "version": "1.1.4",
+        "version_normalized": "1.1.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fluxfw/LibraryLanguageInstaller.git",
+            "reference": "9c047ae156e503186169dc91a0c4a5910a0cccb0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fluxfw/LibraryLanguageInstaller/zipball/9c047ae156e503186169dc91a0c4a5910a0cccb0",
+            "reference": "9c047ae156e503186169dc91a0c4a5910a0cccb0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0",
+            "srag/dic": ">=0.1.0"
+        },
+        "require-dev": {
+            "srag/generateplugininfoshelper": ">=0.1.0"
+        },
+        "time": "2021-03-23T12:48:08+00:00",
+        "type": "library",
+        "extra": {
+            "ilias_plugin": {
+                "ilias_min_version": "5.4.0",
+                "ilias_max_version": "6.999"
+            },
+            "generate_plugin_readme_template": "ILIAS_LIBRARY",
+            "long_description_template": "src/LONG_DESCRIPTION.md"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "srag\\LibraryLanguageInstaller\\AsqQuestionPool\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "studer + raimann ag - Team Custom 1",
+                "email": "support-custom1@studer-raimann.ch",
+                "homepage": "https://studer-raimann.ch",
+                "role": "Developer"
+            }
+        ],
+        "description": "Install additional and external lang files for a plugin",
+        "homepage": "https://github.com/fluxfw/LibraryLanguageInstaller",
+        "keywords": [
+            "ILIAS",
+            "installer",
+            "language",
+            "library"
+        ]
+    },
+    {
+        "name": "srag/removeplugindataconfirm",
+        "version": "0.7.6",
+        "version_normalized": "0.7.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fluxfw/RemovePluginDataConfirm.git",
+            "reference": "c9ef8dde2b8db1814c195cef620fb26d36703225"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fluxfw/RemovePluginDataConfirm/zipball/c9ef8dde2b8db1814c195cef620fb26d36703225",
+            "reference": "c9ef8dde2b8db1814c195cef620fb26d36703225",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0",
+            "srag/dic": ">=0.1.0",
+            "srag/librarylanguageinstaller": ">=0.1.0"
+        },
+        "require-dev": {
+            "srag/generateplugininfoshelper": ">=0.1.0"
+        },
+        "time": "2021-03-29T07:10:46+00:00",
+        "type": "library",
+        "extra": {
+            "ilias_plugin": {
+                "ilias_min_version": "5.4.0",
+                "ilias_max_version": "6.999"
+            },
+            "generate_plugin_readme_template": "ILIAS_LIBRARY",
+            "long_description_template": "src/LONG_DESCRIPTION.md"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "srag\\RemovePluginDataConfirm\\AsqQuestionPool\\": "src/"
+            },
+            "classmap": [
+                "src/class.RemovePluginDataConfirmCtrl.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "authors": [
+            {
+                "name": "studer + raimann ag - Team Custom 1",
+                "email": "support-custom1@studer-raimann.ch",
+                "homepage": "https://studer-raimann.ch",
+                "role": "Developer"
+            }
+        ],
+        "description": "Demand if plugin data should be removed on uninstall",
+        "homepage": "https://github.com/fluxfw/RemovePluginDataConfirm",
+        "keywords": [
+            "ILIAS",
+            "confirm",
+            "data",
+            "plugin",
+            "uninstall"
+        ]
+    }
+]
