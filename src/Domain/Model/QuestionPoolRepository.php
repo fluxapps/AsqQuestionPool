@@ -1,19 +1,18 @@
 <?php
 declare(strict_types = 1);
 
-namespace srag\asq\Test\Domain\Result\Model;
+namespace srag\asq\QuestionPool\Domain\Model;
 
 use srag\CQRS\Aggregate\AbstractAggregateRepository;
 use srag\CQRS\Aggregate\AbstractAggregateRoot;
 use srag\CQRS\Event\DomainEvents;
 use srag\CQRS\Event\EventStore;
-use srag\asq\QuestionPool\Domain\Model\QuestionPool;
 use srag\asq\QuestionPool\Domain\Persistence\QuestionPoolEventStore;
 
 /**
  * Class QuestionPoolRepository
  *
- * @package srag\asq\Test
+ * @package srag\asq\QuestionPool
  *
  * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>
  */

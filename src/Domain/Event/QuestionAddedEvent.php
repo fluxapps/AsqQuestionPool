@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace srag\asq\Test\Domain\Test\Event;
+namespace srag\asq\QuestionPool\Domain\Event;
 
 use ILIAS\Data\UUID\Uuid;
 use ilDateTime;

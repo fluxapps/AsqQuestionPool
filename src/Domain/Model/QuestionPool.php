@@ -7,10 +7,9 @@ use srag\CQRS\Aggregate\AbstractAggregateRoot;
 use srag\CQRS\Event\Standard\AggregateCreatedEvent;
 use ILIAS\Data\UUID\Uuid;
 use ilDateTime;
-use srag\CQRS\Aggregate\AbstractValueObject;
 use srag\asq\Application\Exception\AsqException;
-use srag\asq\Test\Domain\Test\Event\QuestionAddedEvent;
-use srag\asq\Test\Domain\Test\Event\QuestionRemovedEvent;
+use srag\asq\QuestionPool\Domain\Event\QuestionAddedEvent;
+use srag\asq\QuestionPool\Domain\Event\QuestionRemovedEvent;
 
 /**
  * Class QuestionPool
@@ -77,7 +76,7 @@ class QuestionPool extends AbstractAggregateRoot
     /**
      * @param Uuid $question_id
      */
-    public function removeSection(Uuid $question_id, int $user_id) : void
+    public function removeQuestion(Uuid $question_id, int $user_id) : void
     {
         if (in_array($question_id, $this->sections)) {
             $this->ExecuteEvent(
