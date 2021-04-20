@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . "/../../AssessmentTest/vendor/autoload.php";
 
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ILIAS\DI\Container;

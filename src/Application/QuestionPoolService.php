@@ -19,7 +19,7 @@ use ILIAS\Data\UUID\Factory;
 use srag\asq\QuestionPool\Application\Command\CreatePoolCommand;
 
 /**
- * Class SectionService
+ * Class QuestionPoolService
  *
  * @package srag\asq\QuestionPool
  *

@@ -1,7 +1,12 @@
 <?php
 
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
+use srag\asq\Application\Service\ASQDIC;
 use srag\DIC\AsqQuestionPool\DICTrait;
+use srag\asq\QuestionPool\Application\QuestionPoolService;
+use ILIAS\Data\UUID\Factory;
+use ILIAS\Data\UUID\Uuid;
+use srag\asq\Application\Service\AsqServices;
 
 /**
  * Class ilObjAsqQuestionPoolGUI
@@ -18,6 +23,7 @@ use srag\DIC\AsqQuestionPool\DICTrait;
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilInfoScreenGUI
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilObjectCopyGUI
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilCommonActionDispatcherGUI
+ * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: AsqQuestionAuthoringGUI
  */
 class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
 {
@@ -41,6 +47,57 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
      * @var ilObjAsqQuestionPool
      */
     public $object;
+
+    /**
+     * @var Uuid
+     */
+    private $pool_id;
+
+    /**
+     * @var QuestionPoolService
+     */
+    private $pool_service;
+
+    /**
+     * @var AsqServices
+     */
+    private $asq_service;
+
+    /**
+     * @var Factory
+     */
+    private $uuid_factory;
+
+    /**
+     * @inheritDoc
+     */
+    protected function afterConstructor() : void
+    {
+        global $DIC, $ASQDIC;
+
+        ASQDIC::initiateASQ($DIC);
+        $this->asq_service = $ASQDIC->asq();
+        $this->pool_service = new QuestionPoolService();
+        $this->uuid_factory = new Factory();
+
+        $this->loadPool();
+    }
+
+    private function loadPool() : void
+    {
+        if (!is_null($this->object)) {
+            $raw_pool_id = $this->object->getData();
+
+            if (is_null($raw_pool_id)) {
+                $this->pool_id = $this->pool_service->createQuestionPool();
+                $this->object->setData($this->pool_id->toString());
+                $this->object->doUpdate();
+            }
+            else {
+                $this->pool_id = $this->uuid_factory->fromString($raw_pool_id);
+            }
+        }
+    }
 
 
     /**
@@ -146,16 +203,6 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
                 break;
         }
     }
-
-
-    /**
-     * @inheritDoc
-     */
-    protected function afterConstructor() : void
-    {
-
-    }
-
 
     /**
      *
