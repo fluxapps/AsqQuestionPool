@@ -10,6 +10,7 @@ use ILIAS\Data\UUID\Uuid;
 use srag\asq\Application\Service\AsqServices;
 use srag\asq\Application\Service\IAuthoringCaller;
 use srag\asq\Domain\QuestionDto;
+use srag\asq\Infrastructure\Helpers\PathHelper;
 
 /**
  * Class ilObjAsqQuestionPoolGUI
@@ -30,14 +31,16 @@ use srag\asq\Domain\QuestionDto;
  */
 class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCaller
 {
-
+    use PathHelper;
     use DICTrait;
     use AsqQuestionPoolTrait;
 
+    const ID = 'ID';
     const CMD_PERMISSIONS = "perm";
     const CMD_SETTINGS = "settings";
     const CMD_SETTINGS_STORE = "settingsStore";
     const CMD_SHOW_QUESTIONS = "showQuestions";
+    const CMD_QUESTION_ACTION = "questionAction";
     const LANG_MODULE_OBJECT = "object";
     const LANG_MODULE_SETTINGS = "settings";
     const PLUGIN_CLASS_NAME = ilAsqQuestionPoolPlugin::class;
@@ -51,6 +54,8 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
     const COL_AUTHOR = 'QUESTION_AUTHOR';
     const COL_EDITLINK = "QUESTION_EDITLINK";
     const VAL_NO_TITLE = '-----';
+    const VAR_ACTION = 'selectedAction';
+    const VAR_ACTION_DELETE = 'deleteQuestion';
 
     /**
      * @var ilObjAsqQuestionPool
@@ -195,6 +200,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
 
                     case self::CMD_SETTINGS:
                     case self::CMD_SETTINGS_STORE:
+                    case self::CMD_QUESTION_ACTION:
                         // Write commands
                         if (!ilObjAsqQuestionPoolAccess::hasWriteAccess()) {
                             ilObjAsqQuestionPoolAccess::redirectNonAccess($this);
@@ -295,30 +301,72 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         self::output()->output($html);
     }
 
+    protected function deleteQuestion() : void
+    {
+        if (!array_key_exists('action', $_POST)) {
+            return;
+        }
 
-    /**
-     *
-     */
+        foreach ($_POST['action'] as $question_id) {
+            $this->pool_service->removeQuestion($this->pool_id, $this->uuid_factory->fromString($question_id));
+            ilUtil::sendInfo(self::plugin()->translate('question_removed'));
+        }
+    }
+
+    private function renderQuestionPool(ilTable2GUI $table) : string
+    {
+        $tpl = new ilTemplate($this->getBasePath(__DIR__) . 'templates/default/tpl.show_questions.html', true, true);
+        $tpl->setVariable('QUESTION_TABLE', $table->getHTML());
+        return $tpl->get();
+    }
+
     protected function showQuestions() : void
     {
+        if ($_POST[self::VAR_ACTION] !== null) {
+            $this->{$_POST[self::VAR_ACTION]}();
+        }
+
         self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
 
+        $this->createToolbarButtons();
+
+        $question_table = $this->createQuestionTable();
+
+        $this->show($this->renderQuestionPool($question_table));
+    }
+
+    private function createQuestionTable() : ilTable2GUI
+    {
+        $question_table = new ilTable2GUI($this);
+        $question_table->setRowTemplate("tpl.questions_row.html", "Customizing/global/plugins/Services/Repository/RepositoryObject/AsqQuestionPool");
+        $question_table->addColumn('');
+        $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
+        $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
+        $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
+
+        $question_table->addMultiItemSelectionButton(
+            self::VAR_ACTION,
+            [
+                self::VAR_ACTION_DELETE => self::plugin()->translate("delete_question")
+            ],
+            self::CMD_QUESTION_ACTION,
+            self::plugin()->translate("execute")
+        );
+
+        $question_table->setData($this->getQuestionsAsAssocArray());
+
+        return $question_table;
+    }
+
+    private function createToolbarButtons()
+    {
         $link = $this->asq_service->link()->getCreationLink();
         $button = ilLinkButton::getInstance();
         $button->setUrl($link->getAction());
         $button->setCaption($link->getLabel(), false);
         self::dic()->toolbar()->addButtonInstance($button);
-
-        $question_table = new ilTable2GUI($this);
-        $question_table->setRowTemplate("tpl.questions_row.html", "Customizing/global/plugins/Services/Repository/RepositoryObject/AsqQuestionPool");
-        $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
-        $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
-        $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
-
-        $question_table->setData($this->getQuestionsAsAssocArray());
-
-        $this->show($question_table->getHTML());
     }
+
 
     private function getQuestionsAsAssocArray() : array
     {
@@ -338,6 +386,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = $this->asq_service->link()->getEditLink($question_dto->getId())->getAction();
+            $question_array[self::ID] = $question_dto->getId();
 
             $assoc_array[] = $question_array;
         }
