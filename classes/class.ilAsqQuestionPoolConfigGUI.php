@@ -2,10 +2,9 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+use srag\DIC\AsqQuestionPool\DICTrait;
 use srag\Plugins\AsqQuestionPool\Config\ConfigCtrl;
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
-use srag\DevTools\AsqQuestionPool\DevToolsCtrl;
-use srag\DIC\AsqQuestionPool\DICTrait;
 
 /**
  * Class ilAsqQuestionPoolConfigGUI

@@ -45,7 +45,13 @@ class ObjectSettings extends ActiveRecord
      * @con_is_primary   true
      */
     protected $obj_id;
-
+    /**
+     * @var string
+     *
+     * @con_has_field    true
+     * @con_fieldtype    clob
+     */
+    protected $data;
 
     /**
      * ObjectSettings constructor
@@ -147,5 +153,21 @@ class ObjectSettings extends ActiveRecord
             default:
                 return parent::wakeUp($field_name, $field_value);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getData() : ?string
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param string $data
+     */
+    public function setData(string $data)
+    {
+        $this->data = $data;
     }
 }

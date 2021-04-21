@@ -9,6 +9,7 @@ class ComposerStaticInit67541a25652a2aad69227f2c75f89848
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
+            'srag\\asq\\QuestionPool\\' => 22,
             'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\' => 45,
             'srag\\Plugins\\AsqQuestionPool\\' => 29,
             'srag\\LibraryLanguageInstaller\\AsqQuestionPool\\' => 46,
@@ -20,6 +21,10 @@ class ComposerStaticInit67541a25652a2aad69227f2c75f89848
     );
 
     public static $prefixDirsPsr4 = array (
+        'srag\\asq\\QuestionPool\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\' => 
         array (
             0 => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src',
@@ -51,6 +56,7 @@ class ComposerStaticInit67541a25652a2aad69227f2c75f89848
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'ilAsqQuestionPoolConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilAsqQuestionPoolConfigGUI.php',
         'ilAsqQuestionPoolPlugin' => __DIR__ . '/../..' . '/classes/class.ilAsqQuestionPoolPlugin.php',
         'ilObjAsqQuestionPool' => __DIR__ . '/../..' . '/classes/class.ilObjAsqQuestionPool.php',
@@ -58,10 +64,8 @@ class ComposerStaticInit67541a25652a2aad69227f2c75f89848
         'ilObjAsqQuestionPoolGUI' => __DIR__ . '/../..' . '/classes/class.ilObjAsqQuestionPoolGUI.php',
         'ilObjAsqQuestionPoolListGUI' => __DIR__ . '/../..' . '/classes/class.ilObjAsqQuestionPoolListGUI.php',
         'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfig' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordConfig.php',
-        'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigFactory' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordConfig.php',
         'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigFormGUI' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordConfigFormGUI.php',
         'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigGUI' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordConfigGUI.php',
-        'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigRepository' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordConfig.php',
         'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigTableGUI' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordConfigTableGUI.php',
         'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordObjectFormGUI' => __DIR__ . '/..' . '/srag/activerecordconfig/src/ActiveRecordObjectFormGUI.php',
         'srag\\ActiveRecordConfig\\AsqQuestionPool\\Config\\AbstractFactory' => __DIR__ . '/..' . '/srag/activerecordconfig/src/Config/AbstractFactory.php',
@@ -160,6 +164,19 @@ class ComposerStaticInit67541a25652a2aad69227f2c75f89848
         'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\PluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/PluginUninstallTrait.php',
         'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\RemovePluginDataConfirmCtrl' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/class.RemovePluginDataConfirmCtrl.php',
         'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\RepositoryObjectPluginUninstallTrait' => __DIR__ . '/..' . '/srag/removeplugindataconfirm/src/RepositoryObjectPluginUninstallTrait.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\AddQuestionCommand' => __DIR__ . '/../..' . '/src/Application/Command/AddQuestionCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\AddQuestionCommandHandler' => __DIR__ . '/../..' . '/src/Application/Command/AddQuestionCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\CreatePoolCommand' => __DIR__ . '/../..' . '/src/Application/Command/CreatePoolCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\CreatePoolCommandHandler' => __DIR__ . '/../..' . '/src/Application/Command/CreatePoolCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\RemoveQuestionCommand' => __DIR__ . '/../..' . '/src/Application/Command/RemoveQuestionCommand.php',
+        'srag\\asq\\QuestionPool\\Application\\Command\\RemoveQuestionCommandHandler' => __DIR__ . '/../..' . '/src/Application/Command/RemoveQuestionCommandHandler.php',
+        'srag\\asq\\QuestionPool\\Application\\QuestionPoolService' => __DIR__ . '/../..' . '/src/Application/QuestionPoolService.php',
+        'srag\\asq\\QuestionPool\\Domain\\Event\\QuestionAddedEvent' => __DIR__ . '/../..' . '/src/Domain/Event/QuestionAddedEvent.php',
+        'srag\\asq\\QuestionPool\\Domain\\Event\\QuestionRemovedEvent' => __DIR__ . '/../..' . '/src/Domain/Event/QuestionRemovedEvent.php',
+        'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPool' => __DIR__ . '/../..' . '/src/Domain/Model/QuestionPool.php',
+        'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPoolRepository' => __DIR__ . '/../..' . '/src/Domain/Model/QuestionPoolRepository.php',
+        'srag\\asq\\QuestionPool\\Domain\\Persistence\\QuestionPoolEventStore' => __DIR__ . '/../..' . '/src/Domain/Persistence/QuestionPoolEventStore.php',
+        'srag\\asq\\QuestionPool\\Domain\\Persistence\\QuestionPoolEventStoreAr' => __DIR__ . '/../..' . '/src/Domain/Persistence/QuestionPoolEventStoreAr.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

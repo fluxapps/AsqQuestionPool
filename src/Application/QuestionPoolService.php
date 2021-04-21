@@ -14,9 +14,11 @@ use srag\asq\QuestionPool\Application\Command\AddQuestionCommand;
 use srag\asq\QuestionPool\Application\Command\AddQuestionCommandHandler;
 use srag\asq\QuestionPool\Application\Command\RemoveQuestionCommand;
 use srag\asq\QuestionPool\Application\Command\RemoveQuestionCommandHandler;
+use srag\asq\QuestionPool\Domain\Model\QuestionPool;
 use srag\asq\QuestionPool\Domain\Model\QuestionPoolRepository;
 use ILIAS\Data\UUID\Factory;
 use srag\asq\QuestionPool\Application\Command\CreatePoolCommand;
+use srag\asq\QuestionPool\Application\Command\CreatePoolCommandHandler;
 
 /**
  * Class QuestionPoolService
@@ -43,8 +45,8 @@ class QuestionPoolService extends ASQService
         $this->command_bus = new CommandBus();
 
         $this->command_bus->registerCommand(new CommandConfiguration(
-            CreateQuestionCommand::class,
-            new CreateQuestionCommandHandler(),
+            CreatePoolCommand::class,
+            new CreatePoolCommandHandler(),
             new OpenAccess()
         ));
 
@@ -110,5 +112,17 @@ class QuestionPoolService extends ASQService
                 $question_id
             )
         );
+    }
+
+    /**
+     * @param Uuid $pool_id
+     * @return Uuid[]
+     */
+    public function getQuestionsOfPool(Uuid $pool_id) : array
+    {
+        /** @var $pool QuestionPool */
+        $pool = $this->repo->getAggregateRootById($pool_id);
+
+        return $pool->getQuestions();
     }
 }

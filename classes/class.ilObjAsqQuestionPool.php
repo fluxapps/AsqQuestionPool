@@ -104,6 +104,21 @@ class ilObjAsqQuestionPool extends ilObjectPlugin
         $this->object_settings->setOnline($is_online);
     }
 
+    /**
+     * @return string
+     */
+    public function getData() : ?string
+    {
+        return $this->object_settings->getData();
+    }
+
+    /**
+     * @param string $data
+     */
+    public function setData(string $data)
+    {
+        $this->object_settings->setData($data);
+    }
 
     /**
      * @inheritDoc

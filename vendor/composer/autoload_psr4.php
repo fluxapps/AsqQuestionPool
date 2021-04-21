@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'srag\\asq\\QuestionPool\\' => array($baseDir . '/src'),
     'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\' => array($vendorDir . '/srag/removeplugindataconfirm/src'),
     'srag\\Plugins\\AsqQuestionPool\\' => array($baseDir . '/src'),
     'srag\\LibraryLanguageInstaller\\AsqQuestionPool\\' => array($vendorDir . '/srag/librarylanguageinstaller/src'),

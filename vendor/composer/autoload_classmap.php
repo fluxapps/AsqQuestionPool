@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'ilAsqQuestionPoolConfigGUI' => $baseDir . '/classes/class.ilAsqQuestionPoolConfigGUI.php',
     'ilAsqQuestionPoolPlugin' => $baseDir . '/classes/class.ilAsqQuestionPoolPlugin.php',
     'ilObjAsqQuestionPool' => $baseDir . '/classes/class.ilObjAsqQuestionPool.php',
@@ -13,10 +14,8 @@ return array(
     'ilObjAsqQuestionPoolGUI' => $baseDir . '/classes/class.ilObjAsqQuestionPoolGUI.php',
     'ilObjAsqQuestionPoolListGUI' => $baseDir . '/classes/class.ilObjAsqQuestionPoolListGUI.php',
     'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfig' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordConfig.php',
-    'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigFactory' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordConfig.php',
     'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigFormGUI' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordConfigFormGUI.php',
     'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigGUI' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordConfigGUI.php',
-    'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigRepository' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordConfig.php',
     'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordConfigTableGUI' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordConfigTableGUI.php',
     'srag\\ActiveRecordConfig\\AsqQuestionPool\\ActiveRecordObjectFormGUI' => $vendorDir . '/srag/activerecordconfig/src/ActiveRecordObjectFormGUI.php',
     'srag\\ActiveRecordConfig\\AsqQuestionPool\\Config\\AbstractFactory' => $vendorDir . '/srag/activerecordconfig/src/Config/AbstractFactory.php',
@@ -115,4 +114,17 @@ return array(
     'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\PluginUninstallTrait' => $vendorDir . '/srag/removeplugindataconfirm/src/PluginUninstallTrait.php',
     'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\RemovePluginDataConfirmCtrl' => $vendorDir . '/srag/removeplugindataconfirm/src/class.RemovePluginDataConfirmCtrl.php',
     'srag\\RemovePluginDataConfirm\\AsqQuestionPool\\RepositoryObjectPluginUninstallTrait' => $vendorDir . '/srag/removeplugindataconfirm/src/RepositoryObjectPluginUninstallTrait.php',
+    'srag\\asq\\QuestionPool\\Application\\Command\\AddQuestionCommand' => $baseDir . '/src/Application/Command/AddQuestionCommand.php',
+    'srag\\asq\\QuestionPool\\Application\\Command\\AddQuestionCommandHandler' => $baseDir . '/src/Application/Command/AddQuestionCommandHandler.php',
+    'srag\\asq\\QuestionPool\\Application\\Command\\CreatePoolCommand' => $baseDir . '/src/Application/Command/CreatePoolCommand.php',
+    'srag\\asq\\QuestionPool\\Application\\Command\\CreatePoolCommandHandler' => $baseDir . '/src/Application/Command/CreatePoolCommandHandler.php',
+    'srag\\asq\\QuestionPool\\Application\\Command\\RemoveQuestionCommand' => $baseDir . '/src/Application/Command/RemoveQuestionCommand.php',
+    'srag\\asq\\QuestionPool\\Application\\Command\\RemoveQuestionCommandHandler' => $baseDir . '/src/Application/Command/RemoveQuestionCommandHandler.php',
+    'srag\\asq\\QuestionPool\\Application\\QuestionPoolService' => $baseDir . '/src/Application/QuestionPoolService.php',
+    'srag\\asq\\QuestionPool\\Domain\\Event\\QuestionAddedEvent' => $baseDir . '/src/Domain/Event/QuestionAddedEvent.php',
+    'srag\\asq\\QuestionPool\\Domain\\Event\\QuestionRemovedEvent' => $baseDir . '/src/Domain/Event/QuestionRemovedEvent.php',
+    'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPool' => $baseDir . '/src/Domain/Model/QuestionPool.php',
+    'srag\\asq\\QuestionPool\\Domain\\Model\\QuestionPoolRepository' => $baseDir . '/src/Domain/Model/QuestionPoolRepository.php',
+    'srag\\asq\\QuestionPool\\Domain\\Persistence\\QuestionPoolEventStore' => $baseDir . '/src/Domain/Persistence/QuestionPoolEventStore.php',
+    'srag\\asq\\QuestionPool\\Domain\\Persistence\\QuestionPoolEventStoreAr' => $baseDir . '/src/Domain/Persistence/QuestionPoolEventStoreAr.php',
 );

@@ -3,11 +3,11 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/../../AssessmentTest/vendor/autoload.php";
 
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ILIAS\DI\Container;
 use srag\CustomInputGUIs\AsqQuestionPool\Loader\CustomInputGUIsLoaderDetector;
-use srag\DevTools\AsqQuestionPool\DevToolsCtrl;
+use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\RemovePluginDataConfirm\AsqQuestionPool\RepositoryObjectPluginUninstallTrait;
+use srag\asq\QuestionPool\Domain\Persistence\QuestionPoolEventStoreAr;
 
 /**
  * Class ilAsqQuestionPoolPlugin
@@ -88,9 +88,27 @@ class ilAsqQuestionPoolPlugin extends ilRepositoryObjectPlugin
      */
     protected function deleteData() : void
     {
+        global $DIC;
+
+        $DIC->database()->dropTable(QuestionPoolEventStoreAr::STORAGE_NAME, false);
+
         self::asqQuestionPool()->dropTables();
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function afterActivation()
+    {
+        QuestionPoolEventStoreAr::updateDB();
+    }
+
+    protected function afterDeactivation()
+    {
+        global $DIC;
+
+        $DIC->database()->dropTable(QuestionPoolEventStoreAr::STORAGE_NAME, false);
+    }
 
     /**
      * @inheritDoc

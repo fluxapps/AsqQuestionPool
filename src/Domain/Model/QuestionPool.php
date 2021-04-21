@@ -30,7 +30,7 @@ class QuestionPool extends AbstractAggregateRoot
      * @param int $initiating_user_id
      * @return QuestionPool
      */
-    public static function createNewTest(
+    public static function create(
         Uuid $uuid,
         int $initiating_user_id
     ) : QuestionPool {
@@ -51,7 +51,7 @@ class QuestionPool extends AbstractAggregateRoot
      */
     public function addQuestion(Uuid $question_id, int $user_id) : void
     {
-        if (!in_array($question_id, $this->sections)) {
+        if (!in_array($question_id, $this->questions)) {
             $this->ExecuteEvent(
                 new QuestionAddedEvent(
                     $this->aggregate_id,
@@ -78,7 +78,7 @@ class QuestionPool extends AbstractAggregateRoot
      */
     public function removeQuestion(Uuid $question_id, int $user_id) : void
     {
-        if (in_array($question_id, $this->sections)) {
+        if (in_array($question_id, $this->questions)) {
             $this->ExecuteEvent(
                 new QuestionRemovedEvent(
                     $this->aggregate_id,
