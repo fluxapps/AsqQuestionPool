@@ -53,6 +53,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
     const COL_TYPE = 'QUESTION_TYPE';
     const COL_AUTHOR = 'QUESTION_AUTHOR';
     const COL_EDITLINK = "QUESTION_EDITLINK";
+    const COL_VERSIONS = 'QUESTION_VERSIONS';
     const VAL_NO_TITLE = '-----';
     const VAR_ACTION = 'selectedAction';
     const VAR_ACTION_DELETE = 'deleteQuestion';
@@ -343,6 +344,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
         $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
         $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
+        $question_table->addColumn(self::plugin()->translate("header_versions"), self::COL_VERSIONS);
 
         $question_table->addMultiItemSelectionButton(
             self::VAR_ACTION,
@@ -386,12 +388,25 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = $this->asq_service->link()->getEditLink($question_dto->getId())->getAction();
+            $question_array[self::COL_VERSIONS] = $this->getVersionsInfo($item);
             $question_array[self::ID] = $question_dto->getId();
 
             $assoc_array[] = $question_array;
         }
 
         return $assoc_array;
+    }
+
+    private function getVersionsInfo(Uuid $question_id) : string
+    {
+        $revisions = $this->asq_service->question()->getAllRevisionsOfQuestion($question_id);
+
+        return join('<br />', array_map(function($revision) use ($question_id) {
+            return sprintf(
+                '<a href="%s">%s</a>',
+                $this->asq_service->link()->getPreviewLink($question_id, $revision->getRevisionName())->getAction(),
+                $revision->getRevisionName());
+        }, $revisions));
     }
 
     /**
@@ -410,7 +425,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         $backLink = self::dic()->ui()->factory()->link()->standard(
             self::dic()->language()->txt('back'),
             self::dic()->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS)
-            );
+        );
 
 
         $authoring_context_container = new AuthoringContextContainer(
@@ -420,7 +435,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             $this->object->getType(),
             self::dic()->user()->getId(),
             $this
-            );
+        );
 
         $asq = new AsqQuestionAuthoringGUI(
             $authoring_context_container,
@@ -431,7 +446,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             self::dic()->access(),
             self::dic()->http(),
             $ASQDIC->asq()
-            );
+        );
 
         self::dic()->ctrl()->forwardCommand($asq);
     }
