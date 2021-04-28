@@ -54,6 +54,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
     const COL_AUTHOR = 'QUESTION_AUTHOR';
     const COL_EDITLINK = "QUESTION_EDITLINK";
     const COL_VERSIONS = 'QUESTION_VERSIONS';
+    const COL_STATUS = 'QUESTION_STATUS';
     const VAL_NO_TITLE = '-----';
     const VAR_ACTION = 'selectedAction';
     const VAR_ACTION_DELETE = 'deleteQuestion';
@@ -345,6 +346,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
         $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
         $question_table->addColumn(self::plugin()->translate("header_versions"), self::COL_VERSIONS);
+        $question_table->addColumn(self::plugin()->translate("header_status"), self::COL_STATUS);
 
         $question_table->addMultiItemSelectionButton(
             self::VAR_ACTION,
@@ -389,6 +391,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
             $question_array[self::COL_EDITLINK] = $this->asq_service->link()->getEditLink($question_dto->getId())->getAction();
             $question_array[self::COL_VERSIONS] = $this->getVersionsInfo($item);
+            $question_array[self::COL_STATUS] = $this->getStatus($question_dto);
             $question_array[self::ID] = $question_dto->getId();
 
             $assoc_array[] = $question_array;
@@ -407,6 +410,23 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
                 $this->asq_service->link()->getPreviewLink($question_id, $revision->getRevisionName())->getAction(),
                 $revision->getRevisionName());
         }, $revisions));
+    }
+
+    private function getStatus(QuestionDto $question) : string
+    {
+        $img = '';
+
+        if(!$question->isComplete()) {
+            $img = $this->getBasePath(__DIR__) . 'templates/images/wrong.svg';
+        }
+        else if ($question->hasUnrevisionedChanges()) {
+            $img = $this->getBasePath(__DIR__) . 'templates/images/ok_yellow.svg';
+        }
+        else {
+            $img = $this->getBasePath(__DIR__) . 'templates/images/ok.svg';
+        }
+
+        return sprintf('<img src="%s" style="height: 20px;" />', $img);
     }
 
     /**
