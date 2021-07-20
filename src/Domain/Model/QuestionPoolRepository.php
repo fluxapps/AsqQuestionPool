@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace srag\asq\QuestionPool\Domain\Model;
 
+use srag\asq\QuestionPool\Application\QuestionPoolService;
 use srag\CQRS\Aggregate\AbstractAggregateRepository;
 use srag\CQRS\Aggregate\AbstractAggregateRoot;
 use srag\CQRS\Event\DomainEvents;
@@ -44,5 +45,22 @@ class QuestionPoolRepository extends AbstractAggregateRepository
     protected function reconstituteAggregate(DomainEvents $event_history) : AbstractAggregateRoot
     {
         return QuestionPool::reconstitute($event_history);
+    }
+
+    /**
+     * @param ?array $filters
+     * @return QuestionPoolListItem[]
+     */
+    public function getPools(?array $filters = null) : array
+    {
+        $where = [];
+
+        if ($filters !== null) {
+            if (array_key_exists(QuestionPoolService::FILTER_NAME, $filters)) {
+                $where['title'] = $filters[QuestionPoolService::FILTER_NAME];
+            }
+        }
+
+        return QuestionPoolListItem::where($where)->get();
     }
 }

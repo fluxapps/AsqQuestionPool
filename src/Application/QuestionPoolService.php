@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace srag\asq\QuestionPool\Application;
 
 use ILIAS\Data\UUID\Uuid;
+use srag\asq\QuestionPool\Domain\Model\QuestionPoolData;
+use srag\asq\QuestionPool\Domain\Model\QuestionPoolListItem;
 use srag\CQRS\Command\CommandBus;
 use srag\CQRS\Command\CommandConfiguration;
 use srag\CQRS\Command\Access\OpenAccess;
-use srag\asq\Application\Command\CreateQuestionCommand;
-use srag\asq\Application\Command\CreateQuestionCommandHandler;
 use srag\asq\Application\Service\ASQService;
 use srag\asq\QuestionPool\Application\Command\AddQuestionCommand;
 use srag\asq\QuestionPool\Application\Command\AddQuestionCommandHandler;
@@ -68,16 +68,19 @@ class QuestionPoolService extends ASQService
     /**
      * @return Uuid
      */
-    public function createQuestionPool() : Uuid
+    public function createQuestionPool(?string $name = null, ?string $description = null) : Uuid
     {
         $uuid_factory = new Factory();
         $uuid = $uuid_factory->uuid4();
+
+        $data = new QuestionPoolData($name, $description);
 
         // CreateQuestion.png
         $this->command_bus->handle(
             new CreatePoolCommand(
                 $uuid,
-                $this->getActiveUser()
+                $this->getActiveUser(),
+                $data
             )
         );
 
@@ -124,5 +127,17 @@ class QuestionPoolService extends ASQService
         $pool = $this->repo->getAggregateRootById($pool_id);
 
         return $pool->getQuestions();
+    }
+
+    const FILTER_NAME = 'pool_filter_name';
+    const FILTER_CREATOR = 'pool_filter_creator';
+
+    /**
+     * @param ?array $filters
+     * @return QuestionPoolListItem[]
+     */
+    public function getPools(?array $filters = null) : array
+    {
+        return $this->repo->getPools($filters);
     }
 }

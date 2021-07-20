@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace srag\asq\QuestionPool\Application\Command;
 
 use ILIAS\Data\UUID\Uuid;
+use srag\asq\QuestionPool\Domain\Model\QuestionPoolData;
 use srag\CQRS\Command\AbstractCommand;
 
 /**
@@ -15,26 +16,30 @@ use srag\CQRS\Command\AbstractCommand;
  */
 class CreatePoolCommand extends AbstractCommand
 {
-    /**
-     * @var Uuid
-     */
-    protected $uuid;
+    protected Uuid $uuid;
+
+    protected QuestionPoolData $data;
 
     /**
+     * CreatePoolCommand constructor.
      * @param Uuid $uuid
      * @param int $user_id
+     * @param QuestionPoolData $data
      */
-    public function __construct(Uuid $uuid, int $user_id)
+    public function __construct(Uuid $uuid, int $user_id, QuestionPoolData $data)
     {
         $this->uuid = $uuid;
+        $this->data = $data;
         parent::__construct($user_id);
     }
 
-    /**
-     * @return Uuid
-     */
     public function getId() : Uuid
     {
         return $this->uuid;
+    }
+
+    public function getData() : QuestionPoolData
+    {
+        return $this->data;
     }
 }

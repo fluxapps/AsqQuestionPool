@@ -4,6 +4,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/../../AssessmentTest/vendor/autoload.php";
 
 use ILIAS\DI\Container;
+use srag\asq\QuestionPool\Domain\Model\QuestionPoolListItem;
 use srag\CustomInputGUIs\AsqQuestionPool\Loader\CustomInputGUIsLoaderDetector;
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\RemovePluginDataConfirm\AsqQuestionPool\RepositoryObjectPluginUninstallTrait;
@@ -91,6 +92,7 @@ class ilAsqQuestionPoolPlugin extends ilRepositoryObjectPlugin
         global $DIC;
 
         $DIC->database()->dropTable(QuestionPoolEventStoreAr::STORAGE_NAME, false);
+        $DIC->database()->dropTable(QuestionPoolListItem::STORAGE_NAME, false);
 
         self::asqQuestionPool()->dropTables();
     }
@@ -101,6 +103,7 @@ class ilAsqQuestionPoolPlugin extends ilRepositoryObjectPlugin
     protected function afterActivation()
     {
         QuestionPoolEventStoreAr::updateDB();
+        QuestionPoolListItem::updateDB();
     }
 
     protected function afterDeactivation()
@@ -108,6 +111,7 @@ class ilAsqQuestionPoolPlugin extends ilRepositoryObjectPlugin
         global $DIC;
 
         $DIC->database()->dropTable(QuestionPoolEventStoreAr::STORAGE_NAME, false);
+        $DIC->database()->dropTable(QuestionPoolListItem::STORAGE_NAME, false);
     }
 
     /**

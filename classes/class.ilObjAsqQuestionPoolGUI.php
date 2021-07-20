@@ -105,7 +105,9 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             $raw_pool_id = $this->object->getData();
 
             if (is_null($raw_pool_id)) {
-                $this->pool_id = $this->pool_service->createQuestionPool();
+                $this->pool_id = $this->pool_service->createQuestionPool(
+                    $this->object->getTitle(),
+                    $this->object->getDescription());
                 $this->object->setData($this->pool_id->toString());
                 $this->object->doUpdate();
             }

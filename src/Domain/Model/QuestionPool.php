@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace srag\asq\QuestionPool\Domain\Model;
 
 use srag\CQRS\Aggregate\AbstractAggregateRoot;
+use srag\CQRS\Event\DomainEvent;
 use srag\CQRS\Event\Standard\AggregateCreatedEvent;
 use ILIAS\Data\UUID\Uuid;
 use ilDateTime;
@@ -16,14 +17,15 @@ use srag\asq\QuestionPool\Domain\Event\QuestionRemovedEvent;
  *
  * @package srag\asq\QuestionPool
  *
- * @author studer + raimann ag - Team Core 2 <al@studer-raimann.ch>
+ * @author fluxlabs ag - Adrian Lüthi <adi@fluxlabs.ch>
  */
 class QuestionPool extends AbstractAggregateRoot
 {
-    /**
-     * @var Uuid[]
-     */
-    protected $questions = [];
+    const DATA = 'qpd';
+
+    protected array $questions = [];
+
+    protected QuestionPoolData $data;
 
     /**
      * @param Uuid $uuid
@@ -32,18 +34,32 @@ class QuestionPool extends AbstractAggregateRoot
      */
     public static function create(
         Uuid $uuid,
-        int $initiating_user_id
+        int $initiating_user_id,
+        QuestionPoolData $data
     ) : QuestionPool {
         $pool = new QuestionPool();
         $pool->ExecuteEvent(
             new AggregateCreatedEvent(
                 $uuid,
                 new ilDateTime(time(), IL_CAL_UNIX),
-                $initiating_user_id
-                )
-            );
+                $initiating_user_id,
+                [
+                    self::DATA => $data
+                ]
+            )
+        );
 
         return $pool;
+    }
+
+    /**
+     * @param AggregateCreatedEvent $event
+     */
+    protected function applyAggregateCreatedEvent(DomainEvent $event)
+    {
+        parent::applyAggregateCreatedEvent($event);
+
+        $this->data = $event->getAdditionalData()[self::DATA];
     }
 
     /**

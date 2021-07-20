@@ -5,6 +5,7 @@ namespace srag\asq\QuestionPool\Application\Command;
 
 use ILIAS\Data\Result;
 use ILIAS\Data\Result\Ok;
+use srag\asq\QuestionPool\Domain\Model\QuestionPoolListItem;
 use srag\CQRS\Command\CommandContract;
 use srag\CQRS\Command\CommandHandlerContract;
 use srag\asq\QuestionPool\Domain\Model\QuestionPool;
@@ -21,17 +22,23 @@ use srag\asq\Test\Application\Section\Command\CreateSectionCommand;
 class CreatePoolCommandHandler implements CommandHandlerContract
 {
     /**
-     * @param $command CreateSectionCommand
+     * @param $command CreatePoolCommand
      */
     public function handle(CommandContract $command) : Result
     {
         $pool = QuestionPool::create(
             $command->getId(),
-            $command->getIssuingUserId()
-            );
+            $command->getIssuingUserId(),
+            $command->getData()
+        );
 
         $repo = new QuestionPoolRepository();
         $repo->save($pool);
+
+        $list = QuestionPoolListItem::new($command->getData()->getName(),
+        $command->getIssuingUserId(),
+        $command->getData()->getTitle());
+        $list->save();
 
         return new Ok(null);
     }
