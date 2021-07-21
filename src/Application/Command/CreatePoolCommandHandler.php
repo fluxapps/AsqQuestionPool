@@ -35,9 +35,13 @@ class CreatePoolCommandHandler implements CommandHandlerContract
         $repo = new QuestionPoolRepository();
         $repo->save($pool);
 
-        $list = QuestionPoolListItem::new($command->getData()->getName(),
-        $command->getIssuingUserId(),
-        $command->getData()->getTitle());
+        $list = QuestionPoolListItem::new(
+            $command->getId()->toString(),
+            $command->getData()->getName(),
+            $command->getIssuingUserId(),
+            $command->getData()->getTitle()
+        );
+
         $list->save();
 
         return new Ok(null);

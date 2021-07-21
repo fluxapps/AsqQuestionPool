@@ -32,6 +32,17 @@ class QuestionPoolListItem extends ActiveRecord
     /**
      * @var string
      *
+     * @con_is_unique  true
+     * @con_has_field  true
+     * @con_fieldtype  text
+     * @con_length     36
+     * @con_sequence   true
+     */
+    protected string $uuid;
+
+    /**
+     * @var string
+     *
      * @con_has_field  true
      * @con_fieldtype  text
      * @con_length     256
@@ -58,8 +69,9 @@ class QuestionPoolListItem extends ActiveRecord
      */
     protected int $creator_id;
 
-    public static function new(string $title, int $creator_id, string $description = null) : QuestionPoolListItem {
+    public static function new(string $uuid, string $title, int $creator_id, string $description = null) : QuestionPoolListItem {
         $object = new QuestionPoolListItem();
+        $object->uuid = $uuid;
         $object->title = $title;
         $object->description = $description;
         $object->creator_id = $creator_id;
@@ -69,6 +81,11 @@ class QuestionPoolListItem extends ActiveRecord
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getUuid() : string
+    {
+        return $this->uuid;
     }
 
     public function getDescription(): ?string
