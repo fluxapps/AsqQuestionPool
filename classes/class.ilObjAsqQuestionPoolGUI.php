@@ -421,7 +421,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         if(!$question->isComplete()) {
             $img = $this->getBasePath(__DIR__) . 'templates/images/wrong.svg';
         }
-        else if ($question->hasUnrevisionedChanges()) {
+        else if ($question->hasUnrevisedChanges()) {
             $img = $this->getBasePath(__DIR__) . 'templates/images/ok_yellow.svg';
         }
         else {

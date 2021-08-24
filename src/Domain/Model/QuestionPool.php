@@ -55,7 +55,7 @@ class QuestionPool extends AbstractAggregateRoot
     /**
      * @param AggregateCreatedEvent $event
      */
-    protected function applyAggregateCreatedEvent(DomainEvent $event)
+    protected function applyAggregateCreatedEvent(DomainEvent $event) : void
     {
         parent::applyAggregateCreatedEvent($event);
 
