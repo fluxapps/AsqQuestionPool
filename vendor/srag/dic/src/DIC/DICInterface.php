@@ -267,9 +267,9 @@ interface DICInterface
 
 
     /**
-     * @return HTTPServices
+     * @return ILIAS\HTTP\Services
      */
-    public function http() : HTTPServices;
+    public function http() : ILIAS\HTTP\Services;
 
 
     /**

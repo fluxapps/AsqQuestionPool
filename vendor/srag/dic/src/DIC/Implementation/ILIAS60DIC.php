@@ -312,7 +312,7 @@ final class ILIAS60DIC extends AbstractDIC
     /**
      * @inheritDoc
      */
-    public function http() : HTTPServices
+    public function http() : ILIAS\HTTP\Services
     {
         return $this->dic->http();
     }

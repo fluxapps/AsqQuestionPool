@@ -19,7 +19,7 @@ class QuestionPoolEventStoreAr extends AbstractStoredEvent
     /**
      * @return string
      */
-    public static function returnDbTableName()
+    public static function returnDbTableName() : string
     {
         return self::STORAGE_NAME;
     }
