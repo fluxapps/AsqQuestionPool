@@ -14,10 +14,6 @@ use srag\CQRS\Event\EventStore;
  */
 class QuestionPoolEventStore extends EventStore
 {
-    /**
-     * {@inheritDoc}
-     * @see \srag\CQRS\Event\EventStore::getEventArClass()
-     */
     protected function getEventArClass() : string
     {
         return QuestionPoolEventStoreAr::class;

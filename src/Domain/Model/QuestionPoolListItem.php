@@ -98,7 +98,7 @@ class QuestionPoolListItem extends ActiveRecord
         return $this->creator_id;
     }
 
-    public static function returnDbTableName()
+    public static function returnDbTableName() : string
     {
         return self::STORAGE_NAME;
     }

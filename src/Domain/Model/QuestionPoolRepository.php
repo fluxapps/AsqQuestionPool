@@ -19,10 +19,7 @@ use srag\asq\QuestionPool\Domain\Persistence\QuestionPoolEventStore;
  */
 class QuestionPoolRepository extends AbstractAggregateRepository
 {
-    /**
-     * @var EventStore
-     */
-    private $event_store;
+    private QuestionPoolEventStore $event_store;
 
     public function __construct()
     {
@@ -30,27 +27,16 @@ class QuestionPoolRepository extends AbstractAggregateRepository
         $this->event_store = new QuestionPoolEventStore();
     }
 
-    /**
-     * @return EventStore
-     */
     protected function getEventStore() : EventStore
     {
         return $this->event_store;
     }
-    /**
-     * @param DomainEvents $event_history
-     *
-     * @return AbstractAggregateRoot
-     */
+
     protected function reconstituteAggregate(DomainEvents $event_history) : AbstractAggregateRoot
     {
         return QuestionPool::reconstitute($event_history);
     }
 
-    /**
-     * @param ?array $filters
-     * @return QuestionPoolListItem[]
-     */
     public function getPools(?array $filters = null) : array
     {
         $where = [];

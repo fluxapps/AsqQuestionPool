@@ -16,9 +16,6 @@ class QuestionPoolEventStoreAr extends AbstractStoredEvent
 {
     const STORAGE_NAME = "asq_qp_es";
 
-    /**
-     * @return string
-     */
     public static function returnDbTableName() : string
     {
         return self::STORAGE_NAME;

@@ -49,8 +49,7 @@ class FormBuilder extends AbstractFormBuilder
     {
         $buttons = [
             ilObjAsqQuestionPoolGUI::CMD_SETTINGS_STORE  => self::plugin()->translate("save", ilObjAsqQuestionPoolGUI::LANG_MODULE_SETTINGS),
-            ilObjAsqQuestionPoolGUI::CMD_MANAGE_CONTENTS => self::plugin()->translate("cancel", ilObjAsqQuestionPoolGUI::LANG_MODULE_SETTINGS)
-        ];
+         ];
 
         return $buttons;
     }

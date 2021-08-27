@@ -4,8 +4,12 @@ declare(strict_types = 1);
 namespace srag\asq\QuestionPool\Application;
 
 use ILIAS\Data\UUID\Uuid;
+use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
+use srag\asq\QuestionPool\Application\Command\StorePoolCommand;
+use srag\asq\QuestionPool\Application\Command\StorePoolCommandHandler;
 use srag\asq\QuestionPool\Domain\Model\QuestionPoolData;
 use srag\asq\QuestionPool\Domain\Model\QuestionPoolListItem;
+use srag\CQRS\Aggregate\AbstractValueObject;
 use srag\CQRS\Command\CommandBus;
 use srag\CQRS\Command\CommandConfiguration;
 use srag\CQRS\Command\Access\OpenAccess;
@@ -62,6 +66,12 @@ class QuestionPoolService extends ASQService
             new OpenAccess()
         ));
 
+        $this->command_bus->registerCommand(new CommandConfiguration(
+            StorePoolCommand::class,
+            new StorePoolCommandHandler(),
+            new OpenAccess()
+        ));
+
         $this->repo = new QuestionPoolRepository();
     }
 
@@ -115,6 +125,52 @@ class QuestionPoolService extends ASQService
                 $question_id
             )
         );
+    }
+
+    public function storePoolData(Uuid $pool_id, QuestionPoolData $data) : void
+    {
+        /** @var $pool QuestionPool */
+        $pool = $this->repo->getAggregateRootById($pool_id);
+
+        $pool->setData($data, $this->getActiveUser());
+
+        $this->command_bus->handle(
+            new StorePoolCommand(
+                $pool,
+                $this->getActiveUser()
+            )
+        );
+    }
+
+    public function getPoolData(Uuid $pool_id) : QuestionPoolData
+    {
+        /** @var $pool QuestionPool */
+        $pool = $this->repo->getAggregateRootById($pool_id);
+
+        return $pool->getData();
+    }
+
+    public function storePoolConfiguration(Uuid $pool_id, AbstractValueObject $config, string $config_for) : void
+    {
+        /** @var $pool QuestionPool */
+        $pool = $this->repo->getAggregateRootById($pool_id);
+
+        $pool->setConfiguration($config_for, $config, $this->getActiveUser());
+
+        $this->command_bus->handle(
+            new StorePoolCommand(
+                $pool,
+                $this->getActiveUser()
+            )
+        );
+    }
+
+    public function getPoolConfiguration(Uuid $pool_id, string $config_for) : AbstractValueObject
+    {
+        /** @var $pool QuestionPool */
+        $pool = $this->repo->getAggregateRootById($pool_id);
+
+        return $pool->getConfiguration($config_for);
     }
 
     /**
