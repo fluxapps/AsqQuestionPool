@@ -1,5 +1,6 @@
 <?php
 
+use srag\asq\QuestionPool\UI\QuestionListGUI;
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\ASQDIC;
@@ -35,12 +36,10 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
     use DICTrait;
     use AsqQuestionPoolTrait;
 
-    const ID = 'ID';
     const CMD_PERMISSIONS = "perm";
     const CMD_SETTINGS = "settings";
     const CMD_SETTINGS_STORE = "settingsStore";
     const CMD_SHOW_QUESTIONS = "showQuestions";
-    const CMD_QUESTION_ACTION = "questionAction";
     const LANG_MODULE_OBJECT = "object";
     const LANG_MODULE_SETTINGS = "settings";
     const PLUGIN_CLASS_NAME = ilAsqQuestionPoolPlugin::class;
@@ -49,15 +48,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
     const TAB_SETTINGS = "settings";
     const TAB_SHOW_QUESTIONS = "show_questions";
 
-    const COL_TITLE = 'QUESTION_TITLE';
-    const COL_TYPE = 'QUESTION_TYPE';
-    const COL_AUTHOR = 'QUESTION_AUTHOR';
-    const COL_EDITLINK = "QUESTION_EDITLINK";
-    const COL_VERSIONS = 'QUESTION_VERSIONS';
-    const COL_STATUS = 'QUESTION_STATUS';
-    const VAL_NO_TITLE = '-----';
-    const VAR_ACTION = 'selectedAction';
-    const VAR_ACTION_DELETE = 'deleteQuestion';
+
 
     /**
      * @var ilObjAsqQuestionPool
@@ -84,6 +75,8 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
      */
     private $uuid_factory;
 
+    private QuestionListGUI $question_list_gui;
+
     /**
      * @inheritDoc
      */
@@ -97,6 +90,8 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         $this->uuid_factory = new Factory();
 
         $this->loadPool();
+
+        $this->question_list_gui = new QuestionListGUI($this->pool_id);
     }
 
     private function loadPool() : void
@@ -305,16 +300,21 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         self::output()->output($html);
     }
 
-    protected function deleteQuestion() : void
+    protected function showQuestions() : void
     {
-        if (!array_key_exists('action', $_POST)) {
-            return;
+        if ($_POST[QuestionListGUI::VAR_ACTION] !== null) {
+            $this->question_list_gui->{$_POST[QuestionListGUI::VAR_ACTION]}();
         }
 
-        foreach ($_POST['action'] as $question_id) {
-            $this->pool_service->removeQuestion($this->pool_id, $this->uuid_factory->fromString($question_id));
-            ilUtil::sendInfo(self::plugin()->translate('question_removed'));
+        self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
+
+        foreach ($this->question_list_gui->getToolbarButtons() as $button) {
+            self::dic()->toolbar()->addButtonInstance($button);
         }
+
+        $question_table = $this->question_list_gui->createQuestionTable($this);
+
+        $this->show($this->renderQuestionPool($question_table));
     }
 
     private function renderQuestionPool(ilTable2GUI $table) : string
@@ -322,113 +322,6 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         $tpl = new ilTemplate($this->getBasePath(__DIR__) . 'templates/default/tpl.show_questions.html', true, true);
         $tpl->setVariable('QUESTION_TABLE', $table->getHTML());
         return $tpl->get();
-    }
-
-    protected function showQuestions() : void
-    {
-        if ($_POST[self::VAR_ACTION] !== null) {
-            $this->{$_POST[self::VAR_ACTION]}();
-        }
-
-        self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
-
-        $this->createToolbarButtons();
-
-        $question_table = $this->createQuestionTable();
-
-        $this->show($this->renderQuestionPool($question_table));
-    }
-
-    private function createQuestionTable() : ilTable2GUI
-    {
-        $question_table = new ilTable2GUI($this);
-        $question_table->setRowTemplate("tpl.questions_row.html", "Customizing/global/plugins/Services/Repository/RepositoryObject/AsqQuestionPool");
-        $question_table->addColumn('');
-        $question_table->addColumn(self::plugin()->translate("header_title"), self::COL_TITLE);
-        $question_table->addColumn(self::plugin()->translate("header_type"), self::COL_TYPE);
-        $question_table->addColumn(self::plugin()->translate("header_creator"), self::COL_AUTHOR);
-        $question_table->addColumn(self::plugin()->translate("header_versions"), self::COL_VERSIONS);
-        $question_table->addColumn(self::plugin()->translate("header_status"), self::COL_STATUS);
-
-        $question_table->addMultiItemSelectionButton(
-            self::VAR_ACTION,
-            [
-                self::VAR_ACTION_DELETE => self::plugin()->translate("delete_question")
-            ],
-            self::CMD_QUESTION_ACTION,
-            self::plugin()->translate("execute")
-        );
-
-        $question_table->setData($this->getQuestionsAsAssocArray());
-
-        return $question_table;
-    }
-
-    private function createToolbarButtons()
-    {
-        $link = $this->asq_service->link()->getCreationLink();
-        $button = ilLinkButton::getInstance();
-        $button->setUrl($link->getAction());
-        $button->setCaption($link->getLabel(), false);
-        self::dic()->toolbar()->addButtonInstance($button);
-    }
-
-
-    private function getQuestionsAsAssocArray() : array
-    {
-        $assoc_array = [];
-        $items = $this->pool_service->getQuestionsOfPool($this->pool_id);
-
-        if (is_null($items)) {
-            return $assoc_array;
-        }
-
-        foreach ($items as $item) {
-            $question_dto = $this->asq_service->question()->getQuestionByQuestionId($item);
-
-            $data = $question_dto->getData();
-
-            $question_array[self::COL_TITLE] = is_null($data) ? self::VAL_NO_TITLE : (empty($data->getTitle()) ? self::VAL_NO_TITLE : $data->getTitle());
-            $question_array[self::COL_TYPE] = self::dic()->language()->txt($question_dto->getType()->getTitleKey());
-            $question_array[self::COL_AUTHOR] = is_null($data) ? '' : $data->getAuthor();
-            $question_array[self::COL_EDITLINK] = $this->asq_service->link()->getEditLink($question_dto->getId())->getAction();
-            $question_array[self::COL_VERSIONS] = $this->getVersionsInfo($item);
-            $question_array[self::COL_STATUS] = $this->getStatus($question_dto);
-            $question_array[self::ID] = $question_dto->getId();
-
-            $assoc_array[] = $question_array;
-        }
-
-        return $assoc_array;
-    }
-
-    private function getVersionsInfo(Uuid $question_id) : string
-    {
-        $revisions = $this->asq_service->question()->getAllRevisionsOfQuestion($question_id);
-
-        return join('<br />', array_map(function($revision) use ($question_id) {
-            return sprintf(
-                '<a href="%s">%s</a>',
-                $this->asq_service->link()->getPreviewLink($question_id, $revision->getRevisionName())->getAction(),
-                $revision->getRevisionName());
-        }, $revisions));
-    }
-
-    private function getStatus(QuestionDto $question) : string
-    {
-        $img = '';
-
-        if(!$question->isComplete()) {
-            $img = $this->getBasePath(__DIR__) . 'templates/images/wrong.svg';
-        }
-        else if ($question->hasUnrevisedChanges()) {
-            $img = $this->getBasePath(__DIR__) . 'templates/images/ok_yellow.svg';
-        }
-        else {
-            $img = $this->getBasePath(__DIR__) . 'templates/images/ok.svg';
-        }
-
-        return sprintf('<img src="%s" style="height: 20px;" />', $img);
     }
 
     /**
