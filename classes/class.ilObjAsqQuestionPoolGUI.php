@@ -29,6 +29,7 @@ use srag\asq\Infrastructure\Helpers\PathHelper;
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilObjectCopyGUI
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilCommonActionDispatcherGUI
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: AsqQuestionAuthoringGUI
+ * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilObjTaxonomyGUI
  */
 class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCaller
 {
@@ -90,8 +91,6 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         $this->uuid_factory = new Factory();
 
         $this->loadPool();
-
-        $this->question_list_gui = new QuestionListGUI($this->pool_id);
     }
 
     private function loadPool() : void
@@ -109,6 +108,8 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             else {
                 $this->pool_id = $this->uuid_factory->fromString($raw_pool_id);
             }
+
+            $this->question_list_gui = new QuestionListGUI($this->pool_id);
         }
     }
 
@@ -186,20 +187,30 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
                 self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
                 $this->showAuthoring();
                 return;
+            case "ilobjtaxonomygui":
+                $taxGUI = new ilObjTaxonomyGUI();
+                $taxGUI->setAssignedObject($this->object_id);
+                $taxGUI->setMultiple(true);
+                $this->ctrl->forwardCommand($taxGUI);
+
+                break;
             default:
                 switch ($cmd) {
                     case self::CMD_SHOW_QUESTIONS:
+                    case QuestionListGUI::CMD_QUESTION_ACTION:
+                    case QuestionListGUI::CMD_ADD_TAXONOMY:
+                    case QuestionListGUI::CMD_REMOVE_TAXONOMY:
+                    case QuestionListGUI::CMD_EDIT_TAXONOMY:
                         // Read commands
                         if (!ilObjAsqQuestionPoolAccess::hasReadAccess()) {
                             ilObjAsqQuestionPoolAccess::redirectNonAccess(ilRepositoryGUI::class);
                         }
 
-                        $this->{$cmd}();
+                        $this->showQuestions($cmd);
                         break;
 
                     case self::CMD_SETTINGS:
                     case self::CMD_SETTINGS_STORE:
-                    case self::CMD_QUESTION_ACTION:
                         // Write commands
                         if (!ilObjAsqQuestionPoolAccess::hasWriteAccess()) {
                             ilObjAsqQuestionPoolAccess::redirectNonAccess($this);
@@ -300,13 +311,17 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
         self::output()->output($html);
     }
 
-    protected function showQuestions() : void
+    protected function showQuestions(string $cmd) : void
     {
         if ($_POST[QuestionListGUI::VAR_ACTION] !== null) {
             $this->question_list_gui->{$_POST[QuestionListGUI::VAR_ACTION]}();
         }
 
         self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
+
+        if ($cmd !== self::CMD_SHOW_QUESTIONS) {
+            $this->question_list_gui->{$cmd}();
+        }
 
         foreach ($this->question_list_gui->getToolbarButtons() as $button) {
             self::dic()->toolbar()->addButtonInstance($button);
