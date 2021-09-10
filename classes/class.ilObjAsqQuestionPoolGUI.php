@@ -1,5 +1,6 @@
 <?php
 
+use srag\asq\QuestionPool\Application\QuestionPoolPlugin;
 use srag\asq\QuestionPool\UI\QuestionListGUI;
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\asq\Application\Service\AuthoringContextContainer;
@@ -31,7 +32,7 @@ use srag\asq\Infrastructure\Helpers\PathHelper;
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: AsqQuestionAuthoringGUI
  * @ilCtrl_Calls      ilObjAsqQuestionPoolGUI: ilObjTaxonomyGUI
  */
-class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCaller
+class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
 {
     use PathHelper;
     use DICTrait;
@@ -40,7 +41,6 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
     const CMD_PERMISSIONS = "perm";
     const CMD_SETTINGS = "settings";
     const CMD_SETTINGS_STORE = "settingsStore";
-    const CMD_SHOW_QUESTIONS = "showQuestions";
     const LANG_MODULE_OBJECT = "object";
     const LANG_MODULE_SETTINGS = "settings";
     const PLUGIN_CLASS_NAME = ilAsqQuestionPoolPlugin::class;
@@ -76,7 +76,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
      */
     private $uuid_factory;
 
-    private QuestionListGUI $question_list_gui;
+    private QuestionPoolPlugin $pool;
 
     /**
      * @inheritDoc
@@ -99,17 +99,18 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
             $raw_pool_id = $this->object->getData();
 
             if (is_null($raw_pool_id)) {
-                $this->pool_id = $this->pool_service->createQuestionPool(
-                    $this->object->getTitle(),
-                    $this->object->getDescription());
+                $this->pool_id = $this->uuid_factory->uuid4();
                 $this->object->setData($this->pool_id->toString());
                 $this->object->doUpdate();
+                $this->pool = QuestionPoolPlugin::create(
+                    $this->pool_id,
+                    $this->object->getTitle(),
+                    $this->object->getDescription());
             }
             else {
                 $this->pool_id = $this->uuid_factory->fromString($raw_pool_id);
+                $this->pool = QuestionPoolPlugin::load($this->pool_id);
             }
-
-            $this->question_list_gui = new QuestionListGUI($this->pool_id);
         }
     }
 
@@ -119,7 +120,7 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
      */
     public static function getStartCmd() : string
     {
-        return self::CMD_SHOW_QUESTIONS;
+        return QuestionPoolPlugin::getInitialCommand();
     }
 
 
@@ -182,202 +183,54 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI implements IAuthoringCal
 
         $next_class = self::dic()->ctrl()->getNextClass($this);
 
-        switch (strtolower($next_class)) {
-            case strtolower(AsqQuestionAuthoringGUI::class):
-                self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
-                $this->showAuthoring();
-                return;
-            case "ilobjtaxonomygui":
-                $taxGUI = new ilObjTaxonomyGUI();
-                $taxGUI->setAssignedObject($this->object_id);
-                $taxGUI->setMultiple(true);
-                $this->ctrl->forwardCommand($taxGUI);
-
-                break;
-            default:
-                switch ($cmd) {
-                    case self::CMD_SHOW_QUESTIONS:
-                    case QuestionListGUI::CMD_QUESTION_ACTION:
-                    case QuestionListGUI::CMD_ADD_TAXONOMY:
-                    case QuestionListGUI::CMD_REMOVE_TAXONOMY:
-                    case QuestionListGUI::CMD_EDIT_TAXONOMY:
-                        // Read commands
-                        if (!ilObjAsqQuestionPoolAccess::hasReadAccess()) {
-                            ilObjAsqQuestionPoolAccess::redirectNonAccess(ilRepositoryGUI::class);
-                        }
-
-                        $this->showQuestions($cmd);
-                        break;
-
-                    case self::CMD_SETTINGS:
-                    case self::CMD_SETTINGS_STORE:
-                        // Write commands
-                        if (!ilObjAsqQuestionPoolAccess::hasWriteAccess()) {
-                            ilObjAsqQuestionPoolAccess::redirectNonAccess($this);
-                        }
-
-                        $this->{$cmd}();
-                        break;
-
-                    default:
-                        // Unknown command
-                        ilObjAsqQuestionPoolAccess::redirectNonAccess(ilRepositoryGUI::class);
-                        break;
+        switch ($cmd) {
+            case self::CMD_SETTINGS:
+            case self::CMD_SETTINGS_STORE:
+                // Write commands
+                if (!ilObjAsqQuestionPoolAccess::hasWriteAccess()) {
+                    ilObjAsqQuestionPoolAccess::redirectNonAccess($this);
                 }
+
+                $this->{$cmd}();
+                break;
+
+            default:
+                if ($next_class === '') {
+                    $this->pool->executeCommand($cmd);
+                }
+                else {
+                    $this->pool->handleTransfer($next_class);
+                }
+                $this->show();
                 break;
         }
     }
-
-    /**
-     *
-     */
-    protected function setTabs() : void
-    {
-        self::dic()->tabs()->addTab(self::TAB_SHOW_QUESTIONS, self::plugin()->translate("show_contents", self::LANG_MODULE_OBJECT), self::dic()->ctrl()
-            ->getLinkTarget($this, self::CMD_SHOW_QUESTIONS));
-
-        if (ilObjAsqQuestionPoolAccess::hasWriteAccess()) {
-            self::dic()->tabs()->addTab(self::TAB_SETTINGS, self::plugin()->translate("settings", self::LANG_MODULE_SETTINGS), self::dic()->ctrl()
-                ->getLinkTarget($this, self::CMD_SETTINGS));
-        }
-
-        if (ilObjAsqQuestionPoolAccess::hasEditPermissionAccess()) {
-            self::dic()->tabs()->addTab(self::TAB_PERMISSIONS, self::plugin()->translate(self::TAB_PERMISSIONS, "", [], false), self::dic()->ctrl()
-                ->getLinkTargetByClass([
-                    self::class,
-                    ilPermissionGUI::class
-                ], self::CMD_PERMISSIONS));
-        }
-
-        self::dic()->tabs()->manual_activation = true; // Show all tabs as links when no activation
-    }
-
-
-    /**
-     *
-     */
-    protected function settings() : void
-    {
-        self::dic()->tabs()->activateTab(self::TAB_SETTINGS);
-
-        $form = self::asqQuestionPool()->objectSettings()->factory()->newFormBuilderInstance($this, $this->object);
-
-        self::output()->output($form);
-    }
-
-
-    /**
-     *
-     */
-    protected function settingsStore() : void
-    {
-        self::dic()->tabs()->activateTab(self::TAB_SETTINGS);
-
-        $form = self::asqQuestionPool()->objectSettings()->factory()->newFormBuilderInstance($this, $this->object);
-
-        if (!$form->storeForm()) {
-            self::output()->output($form);
-
-            return;
-        }
-
-        ilUtil::sendSuccess(self::plugin()->translate("saved", self::LANG_MODULE_SETTINGS), true);
-
-        self::dic()->ctrl()->redirect($this, self::CMD_SETTINGS);
-    }
-
 
     /**
      * @param string $html
      */
-    protected function show(string $html) : void
+    protected function show()/*: void*/
     {
-        if (!self::dic()->ctrl()->isAsynch()) {
-            self::dic()->ui()->mainTemplate()->setTitle($this->object->getTitle());
+        foreach ($this->pool->ui()->getTabs() as $tab) {
+            self::dic()->tabs()->addTab(
+                $tab->getId(),
+                $tab->getText(),
+                self::dic()->ctrl()->getLinkTarget($this, $tab->getLink())
+            );
 
-            self::dic()->ui()->mainTemplate()->setDescription($this->object->getDescription());
-
-            if (!$this->object->isOnline()) {
-                self::dic()->ui()->mainTemplate()->setAlertProperties([
-                    [
-                        "alert"    => true,
-                        "property" => self::plugin()->translate("status", self::LANG_MODULE_OBJECT),
-                        "value"    => self::plugin()->translate("offline", self::LANG_MODULE_OBJECT)
-                    ]
-                ]);
+            if($tab->isActive()) {
+                self::dic()->tabs()->activateTab($tab->getId());
             }
         }
 
-        self::output()->output($html);
-    }
-
-    protected function showQuestions(string $cmd) : void
-    {
-        if ($_POST[QuestionListGUI::VAR_ACTION] !== null) {
-            $this->question_list_gui->{$_POST[QuestionListGUI::VAR_ACTION]}();
+        foreach ($this->pool->ui()->getToolbar() as $tool) {
+            self::dic()->toolbar()->addComponent($tool);
         }
 
-        self::dic()->tabs()->activateTab(self::TAB_SHOW_QUESTIONS);
+        self::dic()->ui()->mainTemplate()->setTitle($this->pool->ui()->getTitle());
 
-        if ($cmd !== self::CMD_SHOW_QUESTIONS) {
-            $this->question_list_gui->{$cmd}();
-        }
+        self::dic()->ui()->mainTemplate()->setDescription($this->pool->ui()->getDescription());
 
-        foreach ($this->question_list_gui->getToolbarButtons() as $button) {
-            self::dic()->toolbar()->addButtonInstance($button);
-        }
-
-        $question_table = $this->question_list_gui->createQuestionTable($this);
-
-        $this->show($this->renderQuestionPool($question_table));
-    }
-
-    private function renderQuestionPool(ilTable2GUI $table) : string
-    {
-        $tpl = new ilTemplate($this->getBasePath(__DIR__) . 'templates/default/tpl.show_questions.html', true, true);
-        $tpl->setVariable('QUESTION_TABLE', $table->getHTML());
-        return $tpl->get();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \srag\asq\Application\Service\IAuthoringCaller::afterQuestionCreated()
-     */
-    public function afterQuestionCreated(QuestionDto $question) : void
-    {
-        $this->pool_service->addQuestion($this->pool_id, $question->getId());
-    }
-
-    private function showAuthoring()
-    {
-        global $ASQDIC;
-
-        $backLink = self::dic()->ui()->factory()->link()->standard(
-            self::dic()->language()->txt('back'),
-            self::dic()->ctrl()->getLinkTarget($this, self::CMD_SHOW_QUESTIONS)
-        );
-
-
-        $authoring_context_container = new AuthoringContextContainer(
-            $backLink,
-            $this->object->getRefId(),
-            $this->object->getId(),
-            $this->object->getType(),
-            self::dic()->user()->getId(),
-            $this
-        );
-
-        $asq = new AsqQuestionAuthoringGUI(
-            $authoring_context_container,
-            self::dic()->language(),
-            self::dic()->ui(),
-            self::dic()->ctrl(),
-            self::dic()->tabs(),
-            self::dic()->access(),
-            self::dic()->http(),
-            $ASQDIC->asq()
-        );
-
-        self::dic()->ctrl()->forwardCommand($asq);
+        self::output()->output($this->pool->ui()->getContent());
     }
 }
