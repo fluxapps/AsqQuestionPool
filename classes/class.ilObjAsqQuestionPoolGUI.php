@@ -1,5 +1,6 @@
 <?php
 
+use Fluxlabs\Assessment\Tools\Domain\ILIASReference;
 use srag\asq\QuestionPool\Application\QuestionPoolPlugin;
 use srag\asq\QuestionPool\UI\QuestionListGUI;
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
@@ -103,17 +104,21 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
                 $this->object->setData($this->pool_id->toString());
                 $this->object->doUpdate();
                 $this->pool = QuestionPoolPlugin::create(
-                    $this->pool_id,
+                    $this->createReference(),
                     $this->object->getTitle(),
                     $this->object->getDescription());
             }
             else {
                 $this->pool_id = $this->uuid_factory->fromString($raw_pool_id);
-                $this->pool = QuestionPoolPlugin::load($this->pool_id);
+                $this->pool = QuestionPoolPlugin::load($this->createReference());
             }
         }
     }
 
+    public function createReference() : ILIASReference
+    {
+        return new ILIASReference($this->pool_id, $this->object->getType(), $this->object_id);
+    }
 
     /**
      * @return string
