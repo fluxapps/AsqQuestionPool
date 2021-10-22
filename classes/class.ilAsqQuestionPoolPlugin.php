@@ -4,7 +4,12 @@ require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/../../AssessmentTest/vendor/autoload.php";
 
 use ILIAS\DI\Container;
+use srag\asq\Application\Service\ASQDIC;
+use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
+use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
 use srag\asq\QuestionPool\Domain\Model\QuestionPoolListItem;
+use srag\asq\QuestionPool\Infrastructure\Setup\lang\SetupAsqPoolLanguages;
+use srag\asq\QuestionPool\Infrastructure\Setup\sql\SetupAsqPoolDatabase;
 use srag\CustomInputGUIs\AsqQuestionPool\Loader\CustomInputGUIsLoaderDetector;
 use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\RemovePluginDataConfirm\AsqQuestionPool\RepositoryObjectPluginUninstallTrait;
@@ -91,8 +96,9 @@ class ilAsqQuestionPoolPlugin extends ilRepositoryObjectPlugin
     {
         global $DIC;
 
-        $DIC->database()->dropTable(QuestionPoolEventStoreAr::STORAGE_NAME, false);
-        $DIC->database()->dropTable(QuestionPoolListItem::STORAGE_NAME, false);
+        ASQDIC::initiateASQ($DIC);
+
+        SetupAsqPoolDatabase::uninstall();
 
         self::asqQuestionPool()->dropTables();
     }
@@ -102,16 +108,21 @@ class ilAsqQuestionPoolPlugin extends ilRepositoryObjectPlugin
      */
     protected function afterActivation()
     {
-        QuestionPoolEventStoreAr::updateDB();
-        QuestionPoolListItem::updateDB();
+        global $DIC;
+
+        ASQDIC::initiateASQ($DIC);
+
+        SetupAsqPoolDatabase::run();
+        SetupAsqPoolLanguages::new()->run();
     }
 
     protected function afterDeactivation()
     {
         global $DIC;
 
-        $DIC->database()->dropTable(QuestionPoolEventStoreAr::STORAGE_NAME, false);
-        $DIC->database()->dropTable(QuestionPoolListItem::STORAGE_NAME, false);
+        ASQDIC::initiateASQ($DIC);
+
+        SetupAsqPoolDatabase::uninstall();
     }
 
     /**
