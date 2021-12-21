@@ -2,8 +2,8 @@
 
 namespace srag\Plugins\AsqQuestionPool\ObjectSettings;
 
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 use srag\Plugins\AsqQuestionPool\ObjectSettings\Form\FormBuilder;
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ilAsqQuestionPoolPlugin;
 use ilObjAsqQuestionPool;
 use ilObjAsqQuestionPoolGUI;

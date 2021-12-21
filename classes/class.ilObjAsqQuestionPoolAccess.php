@@ -1,7 +1,7 @@
 <?php
 
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\DIC\AsqQuestionPool\DICTrait;
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 
 /**
  * Class ilObjAsqQuestionPoolAccess
@@ -13,7 +13,6 @@ use srag\DIC\AsqQuestionPool\DICTrait;
  */
 class ilObjAsqQuestionPoolAccess extends ilObjectPluginAccess
 {
-
     use DICTrait;
     use AsqQuestionPoolTrait;
 

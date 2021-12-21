@@ -1,7 +1,7 @@
 <?php
 
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 use srag\Plugins\AsqQuestionPool\ObjectSettings\ObjectSettings;
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use srag\DIC\AsqQuestionPool\DICTrait;
 
 /**
