@@ -2,8 +2,8 @@
 
 namespace srag\Plugins\AsqQuestionPool\Config;
 
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 use srag\Plugins\AsqQuestionPool\Config\Form\FormBuilder;
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ilAsqQuestionPoolPlugin;
 use srag\ActiveRecordConfig\AsqQuestionPool\Config\AbstractFactory;
 use srag\ActiveRecordConfig\AsqQuestionPool\Config\AbstractRepository;
@@ -21,7 +21,6 @@ use srag\ActiveRecordConfig\AsqQuestionPool\Config\Config;
  */
 final class Repository extends AbstractRepository
 {
-
     use AsqQuestionPoolTrait;
 
     const PLUGIN_CLASS_NAME = ilAsqQuestionPoolPlugin::class;

@@ -4,7 +4,6 @@ namespace srag\Plugins\AsqQuestionPool;
 
 use srag\Plugins\AsqQuestionPool\Config\Repository as ConfigRepository;
 use srag\Plugins\AsqQuestionPool\ObjectSettings\Repository as ObjectSettingsRepository;
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ilAsqQuestionPoolPlugin;
 use srag\DIC\AsqQuestionPool\DICTrait;
 

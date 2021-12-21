@@ -5,15 +5,11 @@ require_once __DIR__ . "/../../AssessmentTest/vendor/autoload.php";
 
 use ILIAS\DI\Container;
 use srag\asq\Application\Service\ASQDIC;
-use srag\asq\Infrastructure\Setup\lang\SetupAsqLanguages;
-use srag\asq\Infrastructure\Setup\sql\SetupDatabase;
-use srag\asq\QuestionPool\Domain\Model\QuestionPoolListItem;
 use srag\asq\QuestionPool\Infrastructure\Setup\lang\SetupAsqPoolLanguages;
 use srag\asq\QuestionPool\Infrastructure\Setup\sql\SetupAsqPoolDatabase;
 use srag\CustomInputGUIs\AsqQuestionPool\Loader\CustomInputGUIsLoaderDetector;
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 use srag\RemovePluginDataConfirm\AsqQuestionPool\RepositoryObjectPluginUninstallTrait;
-use srag\asq\QuestionPool\Domain\Persistence\QuestionPoolEventStoreAr;
 
 /**
  * Class ilAsqQuestionPoolPlugin

@@ -2,9 +2,9 @@
 
 namespace srag\Plugins\AsqQuestionPool\ObjectSettings;
 
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ilAsqQuestionPoolPlugin;
 use srag\DIC\AsqQuestionPool\DICTrait;
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 
 /**
  * Class Repository

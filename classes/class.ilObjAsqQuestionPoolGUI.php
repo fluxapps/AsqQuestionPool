@@ -2,18 +2,14 @@
 
 use Fluxlabs\Assessment\Tools\Domain\ILIASReference;
 use srag\asq\QuestionPool\Application\QuestionPoolPlugin;
-use srag\asq\QuestionPool\UI\QuestionListGUI;
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
-use srag\asq\Application\Service\AuthoringContextContainer;
 use srag\asq\Application\Service\ASQDIC;
 use srag\DIC\AsqQuestionPool\DICTrait;
 use srag\asq\QuestionPool\Application\QuestionPoolService;
 use ILIAS\Data\UUID\Factory;
 use ILIAS\Data\UUID\Uuid;
 use srag\asq\Application\Service\AsqServices;
-use srag\asq\Application\Service\IAuthoringCaller;
-use srag\asq\Domain\QuestionDto;
 use srag\asq\Infrastructure\Helpers\PathHelper;
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 
 /**
  * Class ilObjAsqQuestionPoolGUI

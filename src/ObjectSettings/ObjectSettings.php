@@ -2,11 +2,11 @@
 
 namespace srag\Plugins\AsqQuestionPool\ObjectSettings;
 
-use srag\Plugins\AsqQuestionPool\Utils\AsqQuestionPoolTrait;
 use ActiveRecord;
 use arConnector;
 use ilAsqQuestionPoolPlugin;
 use srag\DIC\AsqQuestionPool\DICTrait;
+use srag\Plugins\AsqQuestionPool\AsqQuestionPoolTrait;
 
 /**
  * Class ObjectSettings
@@ -20,7 +20,6 @@ use srag\DIC\AsqQuestionPool\DICTrait;
  */
 class ObjectSettings extends ActiveRecord
 {
-
     use DICTrait;
     use AsqQuestionPoolTrait;
 
