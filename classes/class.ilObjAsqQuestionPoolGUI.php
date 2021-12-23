@@ -198,11 +198,12 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
             default:
                 if ($next_class === '') {
                     $this->pool->executeCommand($cmd);
+                    $this->show();
                 }
                 else {
                     $this->pool->handleTransfer($next_class);
                 }
-                $this->show();
+
                 break;
         }
     }
