@@ -173,6 +173,10 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
         return $form;
     }
 
+    protected function setTabs()
+    {
+
+    }
 
     /**
      * @param string $cmd
