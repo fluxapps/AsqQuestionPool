@@ -113,7 +113,12 @@ class ilObjAsqQuestionPoolGUI extends ilObjectPluginGUI
 
     public function createReference() : ILIASReference
     {
-        return new ILIASReference($this->pool_id, $this->object->getType(), $this->object_id);
+        return new ILIASReference(
+            $this->pool_id,
+            $this->object->getType(),
+            $this->object_id,
+            self::asqQuestionPool()->objectSettings()->getObjectSettingsById($this->object_id)
+        );
     }
 
     /**
